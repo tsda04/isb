@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
+
 def run_cipher():
+    """
+     This function encrypts text from "text1.txt" using a key from "key.txt"
+     and writes the output to "new_file.txt".
+    """
     try:
         with open('text1.txt', 'r', encoding='utf8') as f_text:
             text = f_text.read()
@@ -7,7 +13,6 @@ def run_cipher():
         with open('key.txt', 'r', encoding='utf8') as f_key:
             key = int(f_key.read())
 
-        lines = text.splitlines()
         new_text = ''
         for char in text:
             if char.isalpha():
