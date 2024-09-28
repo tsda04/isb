@@ -1,5 +1,5 @@
 import collections
-import key_2
+import my_key_2 as my_key_2
 
 
 def frequency_analysis(text: str) -> list:
@@ -57,20 +57,20 @@ if __name__ == "__main__":
     with open("cod3.txt", "r", encoding='utf-8') as f1:
         cipher_text = f1.read()
 
-    if len(key_2.key) == 0:
+    if len(my_key_2.key) == 0:
         # если ключ еще не был создан
         key = create_key(cipher_text)
-        print(f'Ключ шифрования: (для дальнейшей работы с ним вставьте его в файл key_2.py)')
+        print(f'Ключ шифрования: (для дальнейшей работы с ним вставьте его в файл my_key_2.py)')
         print(key)
 
     else:
         # если ключ был создан
-        key = key_2.key
-        print(f'Ключ шифрования загружен из key_2.py')
+        key = my_key_2.key
+        print(f'Ключ шифрования загружен из my_key_2.py')
 
-    #deciphered_text = decrypt(cipher_text, ''.join([k for k, _ in key.items()]))
     deciphered_text = decrypt(cipher_text, key)
     with open('cod3_decrypted.txt', 'w', encoding='utf-8') as f:
         f.write(deciphered_text)
     print(f'Расшифрованный текст записан в cod3_decrypted.txt')
+    print()
     print(deciphered_text)
