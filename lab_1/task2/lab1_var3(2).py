@@ -1,5 +1,6 @@
 import os
 import collections
+import key_2
 
 def frequency_analysis(text : str) -> list:
     """
@@ -14,6 +15,19 @@ def frequency_analysis(text : str) -> list:
     sorted_frequency = sorted(frequency.items(), key=lambda x: x[1])
     result = [(char, count / total) for char, count in sorted_frequency]
     return result
+
+def create_key(cipher_text : str) -> dict:
+    freq_cipher = frequency_analysis(cipher_text)
+    freq_ru = {}
+    with open("frequencies.txt", "r", encoding='utf-8') as f:
+        for line in f:
+            char, freq = line.split('=')
+            freq_ru[char] = float(freq)
+
+    # Сортировка по убыванию частоты
+    sorted_freq_cipher = sorted(freq_cipher, key=lambda x: x[1], reverse=True)
+    key = {fc[0]: fr[0] for fc, fr in zip(sorted_freq_cipher, freq_ru)}
+    return key
 def decrypt(text : str, key : str) -> str:
     """
     Расшифровывает текст с помощью ключа.
@@ -41,17 +55,8 @@ if __name__ == "__main__":
     with open("cod3.txt", "r", encoding='utf-8') as f:
         cipher_text = f.read()
 
-    freq_cipher = frequency_analysis(cipher_text)
-    freq_ru = {}
-    with open("frequencies.txt", "r", encoding='utf-8') as f:
-        for line in f:
-            char, freq = line.split('=')
-            freq_ru[char] = float(freq)
-
-    # Сортировка по убыванию частоты
-    sorted_freq_cipher = sorted(freq_cipher, key=lambda x: x[1], reverse=True)
-    key = {fc[0]: fr[0] for fc, fr in zip(sorted_freq_cipher, freq_ru)}
-    print(f'Ключ шифрования: (для дальнейшей работы с ним вставьте его в файл key2.py)')
+    key = create_key(cipher_text)
+    print(f'Ключ шифрования: (для дальнейшей работы с ним вставьте его в файл key_2.py)')
     print(key)
 
     deciphered_text = decrypt(cipher_text, ''.join([k for k, _ in key.items()]))
