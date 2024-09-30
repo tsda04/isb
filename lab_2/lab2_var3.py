@@ -38,7 +38,7 @@ def nist_1_monobit(bitseq, significance=0.01):
     Pval = math.erfc(Sn / math.sqrt(2.0))
 
     # print("Проверка: ", D, ":", Sn, Pval, (Pval > significance))  # Отладочная печать
-
+    print ("Pval = ", Pval)
     return (Pval > significance)
 
 
@@ -64,6 +64,7 @@ def nist_2_runs(bitseq, significance=0.01):
     Pval = math.erfc(abs(V_N - 2 * N * zeta * (1 - zeta)) /
                      (2 * math.sqrt(2.0 * N) * zeta * (1 - zeta)))
     # print(f"Проверка: V_N = {V_N:-3d}, Pval = {Pval:.3f}")
+    print("Pval = ", Pval)
     return (Pval > significance)
 
 
@@ -126,18 +127,20 @@ def nist_3_longest_run_of_ones_in_block(bitseq, significance=0.01, blocklen=8):
 
     Pval = gamma_functions.gammaincc(3.0 / 2.0, chi_sq / 2.0)
     # print(f"Проверка5: chi_sq = {chi_sq}, Pval = {Pval}")
-
+    print("Pval = ", Pval)
     return (Pval > significance)
 
 
 if __name__ == '__main__':
-    alphabet = '01'
+    # alphabet = '01'
     # random.seed()   # Инициализировать генератор псевдо-случ чисел (использ текущее сист время по умолч)
     # for i in range(1,10):
     #    print(random.choice( alphabet ))
 
-    bs = gen_bitsequence(l=128)  # Вызвать функцию генерации битовой последовательности
-    print(bs, len(bs))
+    # bs = gen_bitsequence(l=128)  # Вызвать функцию генерации битовой последовательности
+    # print(bs, len(bs))
+    bs0 = "01001101101111000010110001110111011101000011111110110110000111001111101100010001010001110101001111101011100100001111000010010110"
+    bs = [ int(bs0[i]) for i in range(0, len(bs0))]
 
     test1 = nist_1_monobit(bs)
     print(f"Test1_monobit: {test1}")
