@@ -17,7 +17,7 @@ def nist_1_monobit(bitseq, significance=0.01):
     '''
     Анализирует bitseq (последовательность битов) с помощью теста Monobit NIST.
     bitseq: последовательность битов для анализа
-    значимость: пороговый уровень P-значения для принятия НУЛЕВОЙ гипотезы.
+    significance: пороговый уровень P-значения для принятия НУЛЕВОЙ гипотезы.
     '''
 
     # --- Реализация по формуле из методички:
@@ -38,6 +38,32 @@ def nist_1_monobit(bitseq, significance=0.01):
     return (Pval > significance)
 
 
+def nist_2_runs(bitseq, significance=0.01):
+    '''
+    Анализирует bitseq (последовательность битов) с помощью теста Runs.
+    bitseq: последовательность битов для анализа
+    significance: пороговый уровень P-значения для принятия НУЛЕВОЙ гипотезы.
+    '''
+    N = len(bitseq)
+    # Сначала проверим базовый критерий, нужно ли делать тест
+    zeta = bitseq.count(1) / N
+
+    #   Если базовая проверка не выполнена, вернуть False и закончить
+    if(abs(zeta - 0.5) >= 2.0 / math.sqrt(N)):
+        return False;
+
+    # Основной тест
+    V_N = 0 # Переменная для расчета общего кол-ва перемен последовательности
+    for i in range(N-1):  # 0, 1, 2, ...., 127-1=126
+        if(bitseq[i] != bitseq[i+1]):
+            V_N += 1;
+    Pval = math.erfc(abs(V_N - 2 * N * zeta * (1 - zeta)) /
+                      (2 * math.sqrt(2.0 * N) * zeta * (1 - zeta))
+                    )
+    print(f"Проверка: V_N = {V_N:-3d}, Pval = {Pval:.3f}")
+    return (Pval > significance)
+
+
 if __name__ == '__main__':
     alphabet = '01'
     # random.seed()   # Инициализировать генератор псевдо-случ чисел (использ текущее сист время по умолч)
@@ -49,3 +75,7 @@ if __name__ == '__main__':
 
     test1 = nist_1_monobit(bs)
     print(f"Test1_monobit: {test1}")
+
+    test2 = nist_2_runs( bs )
+    print( f"Test2_runs: {test2}" )
+
